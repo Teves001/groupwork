@@ -5,17 +5,10 @@ library(readr)
 Survey <- read_csv("/cloud/project/User Experience Survey_ Online and Offline Video Editing Apps (Responses) - Form Responses 1 (1).csv")
 View(Survey)
 
-
 #Age Demographics
-age <- c(20,18,20,20,19,22,22,21,20,23,19,18,
-         19,20,21,23,20,20,20,22,22,18,19,23,
-         24,20,20,20,21,20,19,19,19,20,20,19,
-         20,20,20,19,20,19,19,20,22,20,20,18,
-         20,20,21,20,19,19,20,20,21,20,19,19,
-         20,20,18,20,20,19,19,20,20,20,20,19,
-         20,21,20,20,23,21,19,21,21,21,20,20,
-         19,20,20,18,20,19,20,16,17,16,20,17,
-         20,21,20,20,19)
+age <- c(Survey$Age)
+age
+
 
 # Convert age to a factor
 age_factor <- as.factor(age)
@@ -23,7 +16,6 @@ age_factor <- as.factor(age)
 # Create a data frame
 data <- data.frame(age_factor)
 
-# Generate a rainbow color palette with the number of unique levels
 colors <- rainbow(length(unique(age_factor)))
 
 # Plot using ggplot2
@@ -33,16 +25,16 @@ ggplot(data) +
 
 
 #School Demographics
-# Create a vector with multiple elements
+
 school <- c(Survey$School)
 school
 
-# Assuming Survey is a data frame containing a column named "School"
+
 school <- as.character(Survey$School)
 
 # Define a function to transform elements
 merge_school <- function(school) {
-  # Use gsub to replace patterns
+  
   school <- gsub("Iloilo Science and Technology University|ISAT U|ISATU|ISAT-U|ILOILO SCIENCE AND TECHNOLOGY UNIVERSITY|Iloilo Science and Technology University \\(ISATU\\)|Iloilo Science and Technology University po|Iloilo Science and Technology University - Main Campus", "ISAT-U", school)
   school <- gsub("Iloilo Doctors College|ILOILO DOCTORS COLLEGE|Iloilo Doctors College of Dentistry|Iloilo Doctors' College", "IDC", school)
   school <- gsub("PHINMA UI|PHINMA UNIVERSITY OF ILOILO|PHINMA-University of Iloilo|PHINMA-UNIVERSITY OF ILOILO|Ui|University of Iloilo", "UI", school)
@@ -54,32 +46,25 @@ merge_school <- function(school) {
   return(school)
 }
 
-
-
-# Assuming Survey is a data frame containing a column named "School"
-# Convert school column to character if it is not
 school <- as.character(Survey$School)
 
-# Apply the function to the vector
 merged_school <- merge_school(school)
 
-# Print the result
 print(merged_school)
 
-# Write the transformed data to a CSV file
+
 csv_file <- "School_final.csv"
 write.csv(data.frame(School = merged_school), file = csv_file, row.names = FALSE)
 
-# Read the CSV file
+
 School_final <- read.csv("School_final.csv")
 
-# Create a table of the transformed school data
+
 school_data <- table(School_final$School)
 
-# Calculate percentages
 percentages <- round((school_data / sum(school_data)) * 100, 1)
 
-# Plot a pie chart
+
 pie(school_data,
     main = "School",
     col = rainbow(length(school_data)),
@@ -87,7 +72,6 @@ pie(school_data,
     cex = 0.4
 )
 
-# Add a legend
 legend_labels <- paste(names(school_data), "")
 legend("topleft", legend = legend_labels, bty = "n", cex = 0.4, fill = rainbow(length(school_data)))
 
